@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Agendar Consulta - MedClinic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>MedClinic</h1>
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="listarConsultas.html">Consultas</a>
+            <a href="relatorio.html">Relatórios</a>
+            <button onclick="logout()">Sair</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Agendar Nova Consulta</h2>
+        <form id="formConsulta">
+            <label>Nome do Paciente</label>
+            <input type="text" id="paciente" required>
+
+            <label>Médico Responsável</label>
+            <input type="text" id="medico" required>
+
+            <label>Especialidade</label>
+            <select id="especialidade" required>
+                <option value="Clínica Geral">Clínica Geral</option>
+                <option value="Cardiologia">Cardiologia</option>
+                <option value="Pediatria">Pediatria</option>
+                <option value="Ortopedia">Ortopedia</option>
+            </select>
+
+            <label>Data da Consulta</label>
+            <input type="date" id="dataConsulta" required>
+
+            <label>Valor da Consulta (R$)</label>
+            <input type="number" id="valor" step="0.01" required>
+
+            <button type="submit" class="btn">Salvar Consulta</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('formConsulta').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const dados = {
+                paciente: document.getElementById('paciente').value,
+                medico: document.getElementById('medico').value,
+                especialidade: document.getElementById('especialidade').value,
+                dataConsulta: document.getElementById('dataConsulta').value,
+                valor: parseFloat(document.getElementById('valor').value)
+            };
+
+            const resp = await fetch('/api/consultas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+
+            if (resp.ok) {
+                window.location.href = '/listarConsultas.html';
+            } else {
+                alert('Erro ao cadastrar consulta.');
+            }
+        });
+
+        async function logout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Usuários - MedClinic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>MedClinic</h1>
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="cadastrarUsuario.html">Novo Usuário</a>
+            <button onclick="logout()">Sair</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Usuários Cadastrados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Login</th>
+                    <th>Função / Papel</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaUsuarios"></tbody>
+        </table>
+    </div>
+
+    <script>
+        fetch('/api/usuarios').then(r => r.json()).then(lista => {
+            document.getElementById('tabelaUsuarios').innerHTML = lista.map(u => `
+                <tr>
+                    <td>${u.id}</td>
+                    <td>${u.username}</td>
+                    <td>${u.role}</td>
+                </tr>
+            `).join('');
+        });
+
+        async function logout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>

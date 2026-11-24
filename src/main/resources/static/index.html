@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Início - MedClinic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>MedClinic - Gestão Corporativa</h1>
+        <button onclick="logout()">Sair</button>
+    </header>
+
+    <div class="container">
+        <h2 id="boasVindas">Bem-vindo ao MedClinic</h2>
+        <p>Selecione uma das operações abaixo:</p>
+
+        <div class="menu-grid">
+            <a href="cadastrarConsulta.html" class="menu-item">Agendar Consulta (Transação)</a>
+            <a href="listarConsultas.html" class="menu-item">Consultar / Listar Agendamentos</a>
+            <a href="relatorio.html" class="menu-item">Relatório Gerencial</a>
+            <a href="cadastrarUsuario.html" class="menu-item">Cadastrar Usuário</a>
+            <a href="listarUsuarios.html" class="menu-item">Listar Usuários</a>
+        </div>
+    </div>
+
+    <script>
+        fetch('/api/auth/me').then(r => r.json()).then(u => {
+            document.getElementById('boasVindas').textContent = `Bem-vindo, ${u.username} (${u.role})`;
+        });
+
+        async function logout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultas Agendadas - MedClinic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>MedClinic</h1>
+        <nav id="menuNav">
+            <a href="index.html" id="linkHome">Início</a>
+            <a href="cadastrarConsulta.html" id="linkNova">Nova Consulta</a>
+            <button onclick="logout()">Sair</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Consultas Agendadas</h2>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="buscaPaciente" placeholder="Buscar por nome do paciente...">
+            <button class="btn" style="margin-top: 6px;" onclick="carregarConsultas()">Buscar</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Paciente</th>
+                    <th>Médico</th>
+                    <th>Especialidade</th>
+                    <th>Data</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaConsultas"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // Oculta links administrativos se o usuário for USER
+        fetch('/api/auth/me').then(r => r.json()).then(u => {
+            if (u.role !== 'ADMIN') {
+                document.getElementById('linkHome').style.display = 'none';
+                document.getElementById('linkNova').style.display = 'none';
+            }
+        });
+
+        async function carregarConsultas() {
+            const termo = document.getElementById('buscaPaciente').value;
+            const url = termo ? `/api/consultas?paciente=${encodeURIComponent(termo)}` : '/api/consultas';
+            const resp = await fetch(url);
+            const lista = await resp.json();
+
+            const tbody = document.getElementById('tabelaConsultas');
+            tbody.innerHTML = lista.map(c => `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.paciente}</td>
+                    <td>${c.medico}</td>
+                    <td>${c.especialidade}</td>
+                    <td>${c.dataConsulta}</td>
+                    <td>R$ ${c.valor.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        }
+
+        async function logout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/login.html';
+        }
+
+        carregarConsultas();
+    </script>
+</body>
+</html>

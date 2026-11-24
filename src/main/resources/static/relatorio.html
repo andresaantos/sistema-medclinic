@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório Gerencial - MedClinic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>MedClinic</h1>
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="listarConsultas.html">Consultas</a>
+            <button onclick="logout()">Sair</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Relatório Consolidado de Atendimentos</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>Total de Consultas</h3>
+                <p id="totalConsultas">0</p>
+            </div>
+            <div class="card">
+                <h3>Faturamento Total</h3>
+                <p id="faturamentoTotal">R$ 0,00</p>
+            </div>
+        </div>
+
+        <h3>Consultas por Especialidade</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Especialidade</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaEspecialidades"></tbody>
+        </table>
+    </div>
+
+    <script>
+        fetch('/api/consultas/relatorio').then(r => r.json()).then(dados => {
+            document.getElementById('totalConsultas').textContent = dados.totalConsultas;
+            document.getElementById('faturamentoTotal').textContent = `R$ ${dados.faturamentoTotal.toFixed(2)}`;
+
+            const linhas = Object.entries(dados.porEspecialidade).map(([esp, qtd]) => `
+                <tr>
+                    <td>${esp}</td>
+                    <td>${qtd}</td>
+                </tr>
+            `).join('');
+            document.getElementById('tabelaEspecialidades').innerHTML = linhas;
+        });
+
+        async function logout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>

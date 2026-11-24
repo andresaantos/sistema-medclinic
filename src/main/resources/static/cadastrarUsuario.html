@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Usuário - MedClinic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>MedClinic</h1>
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="listarUsuarios.html">Usuários</a>
+            <button onclick="logout()">Sair</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Cadastrar Novo Usuário</h2>
+        <form id="formUsuario">
+            <label>Login (Username)</label>
+            <input type="text" id="username" required>
+
+            <label>Senha</label>
+            <input type="password" id="password" required>
+
+            <label>Papel (Role)</label>
+            <select id="role">
+                <option value="USER">USER (Atendente)</option>
+                <option value="ADMIN">ADMIN (Administrador)</option>
+            </select>
+
+            <button type="submit" class="btn">Cadastrar Usuário</button>
+            <p id="msgErro" class="erro"></p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('formUsuario').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const dados = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                role: document.getElementById('role').value
+            };
+
+            const resp = await fetch('/api/usuarios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+
+            if (resp.ok) {
+                window.location.href = '/listarUsuarios.html';
+            } else {
+                const err = await resp.json();
+                document.getElementById('msgErro').textContent = err.erro || 'Erro ao cadastrar.';
+            }
+        });
+
+        async function logout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>

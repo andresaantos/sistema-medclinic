@@ -44,6 +44,7 @@ medclinic/
             ├── listarUsuarios.html
             ├── relatorio.html
             └── style.css
+```
 
 
 ## 4. Roteiro de Instalação, Execução e Testes

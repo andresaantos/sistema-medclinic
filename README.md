@@ -57,7 +57,7 @@ medclinic/
 ### Passo 1: Baixar o Projeto
 Clone o repositório ou baixe o ZIP pelo GitHub:
 ```bash
-git clone [https://github.com/andresaantos/sistema-medclinic.git](https://github.com/andresaantos/sistema-medclinic.git)
+git clone https://github.com/andresaantos/sistema-medclinic.git
 ```
 
 ### Passo 2: Criar o Banco de Dados

@@ -1,6 +1,6 @@
 # MedClinic — Sistema de Gestão de Consultas Médicas
 
-Projeto desenvolvido para a disciplina de **Desenvolvimento de Sistemas Corporativos** (Tecnologia em Sistemas para Internet — UERN/UAB), aplicando a arquitetura em três camadas **MVC** com Spring Boot, PostgreSQL e front-end em HTML5, CSS3 e JavaScript.
+Projeto desenvolvido para a disciplina de **Desenvolvimento de Sistemas Corporativos** (Sistemas para Internet - UERN), aplicando a arquitetura em três camadas **MVC** com Spring Boot, PostgreSQL e front-end em HTML5, CSS3 e JavaScript.
 
 ---
 
